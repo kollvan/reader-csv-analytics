@@ -1,5 +1,4 @@
 import csv
-from statistics import median
 from typing import Callable
 
 
@@ -17,7 +16,7 @@ class CSVAnalytics:
         agr_fields = {}
         for record in self._records:
             agr_fields.setdefault(record[primary_field], []).append(type_agr_field(record[agr_field]))
-        return self.__init__([{primary_field: name, agr_field: agg(agr_fields[name])} for name in agr_fields])
+        return CSVAnalytics([{primary_field: name, agr_field: agg(agr_fields[name])} for name in agr_fields])
 
     def sort(self, key):
         self._records.sort(key=key)
