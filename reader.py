@@ -22,7 +22,7 @@ class CSVAnalytics:
         self._records.sort(key=key)
         return self
 
-    def to_list(self, fields:list[str]):
+    def to_list(self, fields: list[str]):
         lst = []
         for record in self._records:
             lst_record = []
