@@ -1,6 +1,6 @@
 import statistics
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Iterable
 
 from reader import CSVAnalytics
 
@@ -16,9 +16,10 @@ class ActionData:
 
 
 class Actions:
+    allow_actions: list[str] = ['median-coffee']
 
     @classmethod
-    def execute(cls, action_name, *args, **kwargs) -> ActionData:
+    def execute(cls, action_name: str, *args, **kwargs) -> ActionData:
         method_name = f'execute_{'_'.join(action_name.split('-'))}'
         if hasattr(cls, method_name):
             action = getattr(cls, method_name)
@@ -26,12 +27,15 @@ class Actions:
         raise UnknownMethodException(f'{method_name}. The called action does not exist.')
 
     @classmethod
-    def execute_median_coffee(cls, filenames: list[str]) -> ActionData:
+    def execute_median_coffee(cls, filenames: Iterable[str]) -> ActionData:
         columns = ['student', 'coffee_spent']
         analytic = CSVAnalytics()
         for filename in filenames:
             analytic.load(filename)
-        total_coffee_spent = analytic.aggregate(*columns, statistics.median).sort(lambda x: -x['coffee_spent'])
+        total_coffee_spent = analytic.aggregate(
+            *columns,
+            aggregation_func=statistics.median
+        ).sort(lambda x: -x['coffee_spent'])
         return ActionData(
             headers=['student', 'median_coffee'],
             data=total_coffee_spent.to_list(columns)

@@ -1,28 +1,43 @@
+from __future__ import annotations
+
 import csv
-from typing import Callable
+from typing import Callable, Self, Iterable, Any
 
 
 class CSVAnalytics:
-    def __init__(self, data: list[dict[any]] | None = None):
-        self._records = data if data else []
+    def __init__(self, data: list[dict[str, Any]] | None = None):
+        self._records: list[dict[str, Any]] = data.copy() if data else []
 
     def load(self, filename: str):
+        '''Loads a csv file into memory.'''
         with open(filename, 'r') as file:
             reader = csv.DictReader(file)
             for record in reader:
                 self._records.append(record)
 
-    def aggregate(self, primary_field, agr_field, agg: Callable, type_agr_field: Callable = int):
+    def aggregate(
+            self,
+            group_by_column: str,
+            target_field: str,
+            *,
+            aggregation_func: Callable[[Iterable[Any]], Any],
+            data_type: Callable = int
+    ) -> CSVAnalytics:
         agr_fields = {}
         for record in self._records:
-            agr_fields.setdefault(record[primary_field], []).append(type_agr_field(record[agr_field]))
-        return CSVAnalytics([{primary_field: name, agr_field: agg(agr_fields[name])} for name in agr_fields])
+            agr_fields.setdefault(record[group_by_column], []).append(data_type(record[target_field]))
+        return CSVAnalytics(
+            [{group_by_column: name, target_field: aggregation_func(agr_fields[name])} for name in agr_fields]
+        )
 
-    def sort(self, key):
+    def sort(self, key: Callable) -> Self:
+        '''Sorts records according to the key function.'''
+
         self._records.sort(key=key)
         return self
 
-    def to_list(self, fields: list[str]):
+    def to_list(self, fields: list[str]) -> list[list[str]]:
+        '''Returns a list of records. The fields parameter specifies which record fields are returned in the list.'''
         lst = []
         for record in self._records:
             lst_record = []

@@ -1,5 +1,5 @@
 .venv/
 .idea/
-*.csv
+/*.csv
 __pycache__
 .pycache/
