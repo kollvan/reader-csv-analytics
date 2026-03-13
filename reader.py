@@ -23,6 +23,19 @@ class CSVAnalytics:
             aggregation_func: Callable[[Iterable[Any]], Any],
             data_type: Callable = int
     ) -> CSVAnalytics:
+        '''
+        Groups records by the specified column and applies an aggregation function to the target field.
+        Parameters
+        ----------
+        group_by_column : str
+            The name of the column for grouping records. Must exist in the data.
+        target_field : str
+            The name of the column whose values will be aggregated. Must exist in the data.
+        aggregation_func : Callable[[Iterable[Any]], Any]
+            Function for aggregating values within a group.
+        data_type : Callable, default=int
+            Function for converting data types before aggregation.
+        '''
         agr_fields = {}
         for record in self._records:
             agr_fields.setdefault(record[group_by_column], []).append(data_type(record[target_field]))

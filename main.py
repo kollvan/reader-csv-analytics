@@ -3,7 +3,7 @@ import glob
 
 import tabulate
 
-from action import Actions
+from action import Actions, UnknownMethodException
 
 
 def get_files(ext: str = 'csv') -> list[str]:
@@ -11,7 +11,7 @@ def get_files(ext: str = 'csv') -> list[str]:
     return glob.glob(f'*.{ext}')
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--files',
                         dest='filenames',
@@ -25,6 +25,10 @@ if __name__ == '__main__':
                         nargs='?',
                         help='the type of report that will be generated')
     params = vars(parser.parse_args())
+
     data = Actions.execute(**params)
-    print(data)
-    print(tabulate.tabulate(data.data, headers=data.headers))
+    print(tabulate.tabulate(data.data, headers=data.headers, tablefmt='fancy_grid'))
+
+
+if __name__ == '__main__':
+    main()

@@ -20,14 +20,16 @@ class Actions:
 
     @classmethod
     def execute(cls, action_name: str, *args, **kwargs) -> ActionData:
+        '''Execute an action with the "execute_" prefix by action_name.'''
         method_name = f'execute_{'_'.join(action_name.split('-'))}'
         if hasattr(cls, method_name):
             action = getattr(cls, method_name)
             return action(*args, **kwargs)
-        raise UnknownMethodException(f'{method_name}. The called action does not exist.')
+        raise UnknownMethodException(f'{method_name}. The called action does not exist.', cls.allow_actions)
 
     @classmethod
     def execute_median_coffee(cls, filenames: Iterable[str]) -> ActionData:
+        '''Executing the action to generate the median_coffee report'''
         columns = ['student', 'coffee_spent']
         analytic = CSVAnalytics()
         for filename in filenames:
