@@ -7,8 +7,6 @@ reader-csv-analytics - консольное приложение для созд
 - [Технологии](#-технологии)
 - [Использование](#-использование)
 
-
-
 ## Технологии
 ---
 - [python](https://docs.python.org/3/)
@@ -18,14 +16,14 @@ reader-csv-analytics - консольное приложение для созд
 ## Использование
 ---
 
-
 Запуск по умолчанию:
 
 ```bash
 python main.py
 ```
-
+![without arguments](https://github.com/kollvan/reader-csv-analytics/blob/a3b29d99e8205cc2ea96098797fe3576c4a93f11/Screenshot_1.png)<br>
 Запуск с указанием ключей:
 ```bash
 python main.py --files programming.csv --report median-coffee
 ```
+![with arguments](https://github.com/kollvan/reader-csv-analytics/blob/a3b29d99e8205cc2ea96098797fe3576c4a93f11/Screenshot_2.png)<br>
